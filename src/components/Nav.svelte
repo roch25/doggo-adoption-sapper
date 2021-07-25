@@ -15,7 +15,7 @@
   };
 </script>
 
-<nav class="navbar is-transparent">
+<nav class="navbar is-transparent is-fixed-top">
   <div class="navbar-brand">
     <a class="navbar-item is-3" href="/">
       <img src="icon.png" alt="icon" width="30" height="30" />
@@ -32,7 +32,9 @@
       <a
         class="navbar-item"
         aria-current={segment === undefined ? "page" : undefined}
-        href=".">Home</a
+        href="."
+      >
+        Home</a
       >
 
       <a
