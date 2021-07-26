@@ -31,6 +31,7 @@
     <div class="navbar-end">
       <a
         class="navbar-item"
+        class:current={segment === undefined}
         aria-current={segment === undefined ? "page" : undefined}
         href="."
       >
@@ -39,24 +40,28 @@
 
       <a
         class="navbar-item"
+        class:current={segment === "adopt"}
         aria-current={segment === "adopt" ? "page" : undefined}
         href="adopt">Adopt</a
       >
 
       <a
         class="navbar-item"
+        class:current={segment === "donate"}
         aria-current={segment === "donate" ? "page" : undefined}
         href="donate">Donate</a
       >
 
       <a
         class="navbar-item"
+        class:current={segment === "events"}
         aria-current={segment === "events" ? "page" : undefined}
         href="events">Events</a
       >
 
       <a
         class="navbar-item"
+        class:current={segment === "help"}
         aria-current={segment === "help" ? "page" : undefined}
         href="help">Help</a
       >
@@ -67,5 +72,8 @@
 <style>
   .navbar-end {
     padding: 0 30px;
+  }
+  a.current {
+    border-bottom: 2px solid #3498db;
   }
 </style>
