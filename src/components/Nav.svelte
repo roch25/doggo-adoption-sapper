@@ -1,17 +1,12 @@
 <script>
   export let segment;
 
-  let navClass = "navbar-menu";
-  let navToggleClass = "navbar-burger";
+  let navClass = true;
+  let navToggleClass = false;
 
   const toggle = () => {
-    if (navClass == "navbar-menu") {
-      navClass = "block";
-      navToggleClass = "navbar-burger is-active";
-    } else {
-      navClass = "navbar-menu";
-      navToggleClass = "navbar-burger";
-    }
+    navClass = !navClass;
+    navToggleClass = !navToggleClass;
   };
 </script>
 
@@ -20,14 +15,19 @@
     <a class="navbar-item is-3" href="/">
       <img src="icon.png" alt="icon" width="30" height="30" />
     </a>
-    <div class={navToggleClass} data-target="navbar" on:click={toggle}>
+    <div
+      class:is-active={navToggleClass}
+      class="navbar-burger"
+      data-target="navbar"
+      on:click={toggle}
+    >
       <span />
       <span />
       <span />
     </div>
   </div>
 
-  <div id="navbar" class={navClass}>
+  <div id="navbar" class:navbar-menu={navClass} class:block={!navClass}>
     <div class="navbar-end">
       <a
         class="navbar-item"
