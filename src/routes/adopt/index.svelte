@@ -29,3 +29,19 @@
   <div class="column" />
   <div class="column" />
 </div>
+
+<a class="fab-container" href="adopt/add" title="Put a dog up for adoption">
+  <button class="button is-link is-rounded">
+    <ion-icon name="add-outline" />
+    <ion-icon name="paw-outline" />
+  </button>
+</a>
+
+<style>
+  .fab-container {
+    cursor: pointer;
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+  }
+</style>

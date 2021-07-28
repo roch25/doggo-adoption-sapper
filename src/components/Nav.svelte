@@ -40,6 +40,7 @@
 
       <a
         class="navbar-item"
+        rel="prefetch"
         class:current={segment === "adopt"}
         aria-current={segment === "adopt" ? "page" : undefined}
         href="adopt">Adopt</a
