@@ -17,7 +17,7 @@
   main {
     position: relative;
     background-color: white;
-    padding: 4em;
+    padding: 4em 2em;
     margin: 0 auto;
     box-sizing: border-box;
   }

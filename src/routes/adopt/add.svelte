@@ -7,25 +7,13 @@
 </script>
 
 <script>
+  import AutoComplete from "simple-svelte-autocomplete";
+  import { doggo } from "../../stores/doggo";
+  import { breeds } from "./_breeds";
+  import { locations } from "./_locations";
+
   const addDog = function () {};
   export let isAdmin;
-
-  // move to stores
-  let newDoggo = {
-    name: "",
-    info: {
-      breed: "",
-      gender: "",
-      location: "",
-    },
-    description: "",
-    contact: "",
-    image: null,
-    fostering: {
-      status: false,
-      duration: "",
-    },
-  };
 
   let fileinput;
   const onFileSelected = (e) => {
@@ -33,7 +21,7 @@
     let reader = new FileReader();
     reader.readAsDataURL(image);
     reader.onload = (e) => {
-      newDoggo.image = e.target.result;
+      $doggo.image = e.target.result;
     };
   };
 </script>
@@ -42,72 +30,71 @@
   <title>Put a dog up for adoption · Dog Adoption and Care</title>
 </svelte:head>
 
-<form on:submit|preventDefault={addDog} class="column is-four-fifths">
+<form on:submit|preventDefault={addDog} class="column is-four-fifths is-full-mobile">
   <h1 style="text-align: center;">Put a dog up for adoption / fostering</h1>
+
   <div class="field is-horizontal">
     <div class="field-label is-normal">
       <label class="label">Name</label>
     </div>
     <div class="field-body">
       <div class="field">
-        <div class="control">
+        <div class="control">    
           <input
             class="input"
             type="text"
-            placeholder="The name of the dog"
-            bind:value={newDoggo.name}
+            placeholder="The name of the dog. E.g. Timmy"
+            bind:value={$doggo.name}
           />
         </div>
-        <p class="help">Leave the field blank if undecided.</p>
+        <p class="help tag">Leave the field blank if undecided.</p>
       </div>
     </div>
   </div>
 
   <div class="field is-horizontal">
+
     <div class="field-label is-normal">
       <label class="label">Info</label>
     </div>
     <div class="field-body">
+    
       <div class="field">
-        <p class="control is-expanded ">
-          <input
-            class="input"
-            type="text"
-            placeholder="Breed"
-            bind:value={newDoggo.info.breed}
-          />
+        <div class="control is-expanded ">
+          <label for="" class="help">Breed</label>
+          <AutoComplete items={breeds.sort()} bind:selectedItem={$doggo.info.breed} />
+        </div>
+        <p class="help tag is-info is-light pointer">
+          <a href="/help/dog-breeds">
+            ⓘ Learn more about dog breeds
+          </a>
         </p>
       </div>
 
       {#if !isAdmin}
         <div class="field">
-          <p class="control is-expanded ">
-            <input
-              class="input"
-              type="text"
-              placeholder="Location"
-              bind:value={newDoggo.info.location}
+          <div class="control is-expanded ">
+            <label for="" class="help">Location</label>
+            <AutoComplete
+              items={locations.sort()}
+              bind:selectedItem={$doggo.info.location}
             />
-          </p>
+          </div>
         </div>
       {/if}
-      <div class="control field">
-        <label for="" class="help">Gender</label>
 
+      <div class="control field">
+        <label class="help">Gender</label>
         <label class="radio">
-          <input
-            type="radio"
-            bind:group={newDoggo.info.gender}
-            value="Female"
-          />
+          <input type="radio" bind:group={$doggo.info.gender} value="Female"/>
           Female
         </label>
         <label class="radio">
-          <input type="radio" bind:group={newDoggo.info.gender} value="Male" />
+          <input type="radio" bind:group={$doggo.info.gender} value="Male" />
           Male
         </label>
-        <label for="" class="help" />
       </div>
+
     </div>
   </div>
 
@@ -120,8 +107,8 @@
         <div class="control">
           <textarea
             class="textarea"
-            placeholder="General description with other information like vaccination history, scars, ..."
-            bind:value={newDoggo.description}
+            placeholder="General description with other information like vaccination history, scars, age, ..."
+            bind:value={$doggo.description}
           />
         </div>
       </div>
@@ -143,7 +130,7 @@
                 class="input"
                 type="tel"
                 placeholder="Your phone number"
-                bind:value={newDoggo.contact}
+                bind:value={$doggo.contact}
               />
             </p>
           </div>
@@ -158,7 +145,7 @@
       <label class="label">Image</label>
     </div>
     <div class="field-body">
-      <div class="field">
+      <div class="field" style="display:none">
         <div class="file">
           <label class="file-label">
             <input
@@ -168,22 +155,25 @@
               on:change={(e) => onFileSelected(e)}
               bind:this={fileinput}
             />
-            <span class="file-cta">
-              <span class="file-label"> Choose an image </span>
-              <ion-icon name="cloud-upload-outline" />
-            </span>
+            <span class="file-cta" />
           </label>
         </div>
       </div>
       <div class="field">
-        <figure class="image is-96x96">
-          {#if newDoggo.image}
-            <img class="avatar" src={newDoggo.image} alt="placeholder" />
+        <figure
+          class="image is-96x96"
+          on:click={() => fileinput.click()}
+          style="background-color: silver; cursor: pointer;"
+        >
+          {#if $doggo.image}
+            <img class="avatar" src={$doggo.image} alt="placeholder" />
           {:else}
-            <img
-              src="https://bulma.io/images/placeholders/128x128.png"
-              alt="placeholder"
+            <ion-icon
+              name="cloud-upload-outline"
+              class="upload"
+              title="Image upload"
             />
+            <img src="" alt="" />
           {/if}
         </figure>
       </div>
@@ -192,23 +182,33 @@
 
   <div class="field is-horizontal">
     <div class="field-label is-normal">
-      <label class="label" />
+      <label class="label"> Is this dog up for fostering?</label>
     </div>
     <div class="field-body">
       <div class="field">
         <div class="control">
-          <input
-            class="checkbox"
-            type="checkbox"
-            bind:checked={newDoggo.fostering.status}
-            placeholder="The name of the dog"
-          /> Is this dog up for fostering?
+          <label class="radio">
+            <input
+              type="radio"
+              bind:group={$doggo.fostering.status}
+              value={true}
+            />
+            Yes
+          </label>
+          <label class="radio">
+            <input
+              type="radio"
+              bind:group={$doggo.fostering.status}
+              value={false}
+            />
+            No
+          </label>
         </div>
       </div>
     </div>
   </div>
 
-  {#if newDoggo.fostering.status}
+  {#if $doggo.fostering.status}
     <div class="field is-horizontal">
       <div class="field-label is-normal">
         <label class="label">Duration</label>
@@ -217,8 +217,8 @@
         <div class="field">
           <div class="control has-icons-left">
             <div class="select is-small">
-              <select bind:value={newDoggo.fostering.duration}>
-                <option selected disabled>Pick a duration</option>
+              <select bind:value={$doggo.fostering.duration}>
+                <option selected disabled>Pick a duration for fostering</option>
                 <option value="2 weeks">2 weeks</option>
                 <option value="1 month">1 month</option>
                 <option value="2-3 months">2-3 months</option>
@@ -248,5 +248,11 @@
 <style>
   .radio {
     margin-left: 4px !important;
+  }
+
+  .upload {
+    transform: translate(50%, 50%);
+    font-size: 3em;
+    color: gray;
   }
 </style>
