@@ -15,6 +15,9 @@
   const addDog = function () {};
   export let isAdmin;
 
+  const breedNames = breeds.map(breed => breed.name)
+  console.log(breedNames)
+
   let fileinput;
   const onFileSelected = (e) => {
     let image = e.target.files[0];
@@ -62,7 +65,7 @@
       <div class="field">
         <div class="control is-expanded ">
           <label for="" class="help">Breed</label>
-          <AutoComplete items={breeds.sort()} bind:selectedItem={$doggo.info.breed} />
+          <AutoComplete items={breedNames.sort()} bind:selectedItem={$doggo.info.breed} />
         </div>
         <p class="help tag is-info is-light pointer">
           <a href="/help/dog-breeds">
